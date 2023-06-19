@@ -1,0 +1,76 @@
+---
+title: "Informe Suicidio Argentina"
+author: "Cristian Battcock"
+date: "2023-06-18"
+output: 
+  html_document:
+    toc: true
+    number_sections: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, fig.with=8, figh.height=8)
+```
+
+## Paquetes
+
+```{r}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(lorem)
+library(xtable)
+library(stargazer)
+library(flexdashboard)
+library(lorem)
+library(readxl)
+library(here)
+library(tinytex)
+
+```
+
+## Carga de datos
+
+```{r}
+dataframe <- read_excel(here::here("C:/Users/Cristian/Dropbox/Postgrados en Psicologia/Master en Behavioral Data Science - U de Barcelona/Modulo 7/Reto 2/M7_Tarea2_Reevaluacion/Datos/Base de datos original/SAT-SS-BU_2017-2021.xlsx"))
+newdf <- dataframe %>% group_by(provincia,anio,tr_edad_suicida,sexo_suicida) %>% 
+summarise(n=n(),.groups='drop')
+```
+
+## Objetivos
+
+En el presente informe se brindará informacion sobre el procesamiento de datos obtenidos de un repositorio web de acceso libre, publicada por el Ministerio de Seguridad de la Nación de la República Argentina, a través de la Dirección Nacional de Estadística Criminal, que pone a disposición los registros administrativos del Sistema de Alerta Temprana de Suicidios (SAT-SS) del Sistema Nacional de Información Criminal, comprendido entre los años 2017/2021.
+El presente informe tendra por objetivos:
+1.- *Exponer la cantidad de suicidios llevados a cabo en la Republica Agentina en el periodo comprendido entre los años 2017 al 2021, diferenciado por sexo.*
+2.- *Exhibir la distribucios de los casos de suicidios por franjas etarias.*
+3.- *Mostrar la distribucion de los suicidios por jurisdicciones provinciales.*
+
+
+## Grafico de evolucion del suicidio por años
+
+```{r echo=FALSE}
+newdf %>% ggplot(aes(x=anio, y=n)) +
+  geom_bar(width = 0.6, stat="identity",
+           position = position_dodge()              
+           )+ 
+  ylim(c(0,200))+
+  labs(x = "Años", y = "Casos suicidios") +
+ 
+  theme(axis.text.x = element_text(angle = -45, vjust = 1, hjust=-0.3)) +  
+  theme_light() +                                                          
+  theme(legend.position = "topleft") +                                     
+  facet_grid(~"Suicidios 2017-2021") +                
+  coord_flip()
+
+```
+## Tabla de Suicidio por Provincias
+
+```{r echo=FALSE}
+newdf<- dataframe %>% group_by(provincia) %>% summarise(Mean=mean(anio),SD=sd(anio),                    .groups = 'drop') %>% 
+  as.data.frame() %>% head() %>% kable() %>% kable_styling("striped")
+
+```
+
+
+```
