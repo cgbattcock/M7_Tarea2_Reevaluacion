@@ -1,0 +1,64 @@
+\documentclass{article}
+\usepackage{blindtext}
+\usepackage{multicol}
+\usepackage{amsmath}
+
+\usepackage{babel}
+\usepackage[T1]{fontenc}
+
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm,
+ }
+
+\renewcommand{\refname}{Referencias}
+\renewcommand{\tablename}{Tabla}
+
+\title{Informe}
+\author{Cristian Battcock}
+\date{2023-06-19}
+
+\usepackage{Sweave}
+\begin{document}
+\maketitle
+
+
+\input{Informe-concordance}
+
+
+\begin{itemize}
+\item Instalar Knitr si fuese necesario
+\item Instalar una distribucion de LaTex: tinytex
+\item Instalar paquetes de LaTex mediante tinytex
+\end{itemize}
+
+<<>>
+if(!require(tinytex)){
+    install.packages('tinytex')
+    library(tinytex)
+}
+
+\begin{Schunk}
+\begin{Sinput}
+> tinytex::tlmgr_install('blindtext')
+\end{Sinput}
+\end{Schunk}
+
+
+\section{Introduccion}
+En el presente informe se expondran los resultados surgidos del analisis de los datos dispuestos en un repositorio web, publicada por el Ministerio de Seguridad de la Nación de la República Argentina, a través de la Dirección Nacional de Estadística Criminal, que pone a disposición los registros administrativos del Sistema de Alerta Temprana de Suicidios (SAT-SS) del Sistema Nacional de Información Criminal, comprendida entre los años 2017/2021.
+
+
+\section{Objetivos}
+El presente informe es el resultado de los objetivos planteados en el proyecto que lo origino:
+\begin{enumerate}
+\item Exponer la cantidad de suicidios llevados a cabo en la Republica Agentina en el periodo comprendido entre los años 2017 al 2021, diferenciado por sexo.
+\item Exhibir la distribucios de los casos de suicidios por franjas etarias.
+\item Mostrar la distribucion de los suicidios por jurisdicciones provinciales.
+\end {enumerate}
+
+
+\end{document}
