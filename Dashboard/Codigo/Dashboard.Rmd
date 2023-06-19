@@ -71,7 +71,10 @@ library('viridis')
 
 maps <- st_read("https://infra.datos.gob.ar/catalog/modernizacion/dataset/7/distribution/7.2/download/provincias.json")
 
-
+ggplot()+
+  geom_sf(data = maps)+
+  theme_bw()+
+  geom_point(data = maps, aes(x = lat, y = long)
 ```
 
 Tabla {data-icon="fa-table"}
