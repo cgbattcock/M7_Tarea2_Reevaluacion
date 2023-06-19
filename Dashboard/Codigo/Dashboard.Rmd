@@ -1,0 +1,93 @@
+---
+title: "Suicidios Argentina"
+autor: "Cristian Battcock"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    social: menu
+    sourc_code: embed
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(flexdashboard)
+library(tidyverse)
+library(maps)
+library(DT)
+library(lorem)
+library(readxl)
+library(here)
+
+dataframe <- read_excel(here::here("C:/Users/Cristian/Dropbox/Postgrados en Psicologia/Master en Behavioral Data Science - U de Barcelona/Modulo 7/Reto 2/M7_T2_Cristian-Battcock/Datos/Base de datos original/SAT-SS-BU_2017-2021.xlsx"))
+
+newdf <- dataframe %>% group_by(provincia,anio,tr_edad_suicida,sexo_suicida) %>% 
+summarise(n=n(),.groups='drop')
+view(newdf)
+```
+Graficos {data-icon="fa-signal"}
+=====================================================================
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Evolución suicidios 2017-2021
+
+```{r}
+newdf %>% ggplot(aes(x=anio, y=n)) +
+  geom_bar(width = 0.6, stat="identity",
+           position = position_dodge()              
+           )+ 
+  ylim(c(0,200))+
+  labs(x = "Años", y = "Casos suicidios") +
+ 
+  theme(axis.text.x = element_text(angle = -45, vjust = 1, hjust=-0.3)) +  
+  theme_light() +                                                          
+  theme(legend.position = "topleft") +                                     
+  facet_grid(~"Suicidios 2017-2021") +                
+  coord_flip()
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Suicidios por Franja Etarias
+
+```{r}
+newdf %>% ggplot(aes(x=tr_edad_suicida, y=n, fill=sexo_suicida)) +
+  geom_line(size=2, colour="red")+
+  guides(color="none")+
+    ylab("Números casos")+
+    xlab("Franja Estaria")+
+  theme(axis.title=element_text(size=8,face="italic"))
+```
+
+### Suicidios por Provincias
+
+```{r}
+library('sf')
+library('ggplot2')
+library('viridis')
+
+maps <- st_read("https://infra.datos.gob.ar/catalog/modernizacion/dataset/7/distribution/7.2/download/provincias.json")
+
+
+```
+
+Tabla {data-icon="fa-table"}
+===============================================================================
+datatable(nwedf,
+          caption = 'Suidios en Argentina',
+          rownames = T,
+          filter = 'top'
+          options = list(pageLength = 25))
+
+
+Acerca del Estudio {data-icon="fa-globe"}
+===============================================================================
+
+Inputs {.slidebar data-height=400}
+-------------------------------------------------------------------------------
+El siguiente estudio provee informacion acerca de suicidios en Argentina cuyos  datos surgen de una base de datos pública dispuesta en un repositorio web, publicada por el Ministerio de Seguridad de la Nación de la República Argentina, a través de la Dirección Nacional de Estadística Criminal, que pone a disposición los registros administrativos del Sistema de Alerta Temprana de Suicidios (SAT-SS) del Sistema Nacional de Información Criminal, comprendida entre los años 2017/2021. 
+
+https://www.argentina.gob.ar/seguridad/estadisticascriminales/bases-de-datos 
