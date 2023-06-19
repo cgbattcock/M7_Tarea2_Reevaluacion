@@ -19,7 +19,7 @@ library(lorem)
 library(readxl)
 library(here)
 
-dataframe <- read_excel(here::here("C:/Users/Cristian/Dropbox/Postgrados en Psicologia/Master en Behavioral Data Science - U de Barcelona/Modulo 7/Reto 2/M7_T2_Cristian-Battcock/Datos/Base de datos original/SAT-SS-BU_2017-2021.xlsx"))
+dataframe <- read_excel(here::here("C:/Users/Cristian/Dropbox/Postgrados en Psicologia/Master en Behavioral Data Science - U de Barcelona/Modulo 7/Reto 2/M7_Tarea2_Reevaluacion/Datos/Base de datos original/SAT-SS-BU_2017-2021.xlsx"))
 
 newdf <- dataframe %>% group_by(provincia,anio,tr_edad_suicida,sexo_suicida) %>% 
 summarise(n=n(),.groups='drop')
@@ -51,15 +51,15 @@ newdf %>% ggplot(aes(x=anio, y=n)) +
 Column {data-width=350}
 -----------------------------------------------------------------------
 
-### Suicidios por Franja Etarias
+### Suicidios por Franjas Etarias
 
 ```{r}
 newdf %>% ggplot(aes(x=tr_edad_suicida, y=n, fill=sexo_suicida)) +
   geom_line(size=2, colour="red")+
   guides(color="none")+
     ylab("Números casos")+
-    xlab("Franja Estaria")+
-  theme(axis.title=element_text(size=8,face="italic"))
+    xlab("Franjas Estarias")+
+  theme(axis.title=element_text(size=12,face="italic"))
 ```
 
 ### Suicidios por Provincias
@@ -69,23 +69,30 @@ library('sf')
 library('ggplot2')
 library('viridis')
 
-maps <- st_read("https://infra.datos.gob.ar/catalog/modernizacion/dataset/7/distribution/7.2/download/provincias.json")
+newdf %>% ggplot(aes(x=provincia, y=n)) +
+  geom_line(size=2, colour="blue")+
+  guides(color="none")+
+    ylab("Números casos")+
+    xlab("Provincias")+
+  theme(axis.text.x = element_text(face = "bold", angle = 45, hjust = 1, size = 7), 
+        axis.title.x = element_blank(), 
+        axis.text.y = element_text(size = 9), 
+        axis.title.y = element_text(size = 11), 
+        legend.position = "none")
+  
+  
 
-ggplot()+
-  geom_sf(data = maps)+
-  theme_bw()+
-  geom_point(data = maps, aes(x = lat, y = long)
 ```
 
 Tabla {data-icon="fa-table"}
 ===============================================================================
-datatable(nwedf,
+```{r}
+datatable(newdf,
           caption = 'Suidios en Argentina',
           rownames = T,
-          filter = 'top'
+          filter = 'top',
           options = list(pageLength = 25))
-
-
+```
 Acerca del Estudio {data-icon="fa-globe"}
 ===============================================================================
 
